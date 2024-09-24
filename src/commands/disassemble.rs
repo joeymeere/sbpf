@@ -28,12 +28,11 @@ pub fn disassemble(path: Option<String>, outfile: Option<String>) -> Result<()> 
     let analysis = Analysis::from_executable(&executable).unwrap();
     let stdout = std::io::stdout();
 
-    analysis.disassemble(&mut stdout.lock())?;
-
     match outfile {
         Some(outpath) => {
             let outpath = ensure_asm_extension(outpath);
             let mut file = File::create(outpath)?;
+            analysis.disassemble(&mut stdout.lock())?;
             analysis.disassemble(&mut file)?;
         }
         None => {
